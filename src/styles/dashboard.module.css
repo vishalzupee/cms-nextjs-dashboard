@@ -1,0 +1,105 @@
+.boday__area__wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+.heading__navigation__main{
+}
+
+.add__wrapper__button__section{
+}
+
+/*dragable section*/
+.dragable_container_full_with{
+    display: block;
+    width: 50%;
+}
+.form-control {
+    display: block;
+    width: 200px;
+    padding: .5rem 1rem;
+    font-size: .9375rem;
+    font-weight: 400;
+    line-height: 20px;
+    color: #637381;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #c4cdd5;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .375rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+
+/*width*/
+.width100{
+    width: 100%;
+}
+
+/*btn*/
+.btn__primary{
+    border: 1px solid #624bff;
+    background: #fff;
+    color: #624bff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    box-shadow: -1px 2px 4px;
+    cursor: pointer;
+}
+
+/*text align*/
+.text__align__right{
+    text-align: right;
+}
+
+/*font size*/
+.font__size__18{
+ font-size: 18px;
+}
+
+/*height*/
+.max-vh-100{
+    height: 100vh;
+}
+
+/*colors*/
+.nav__bar__bg__color{
+    background-color: #212b36;
+}
+.nav__link__normal__color{ color: #637381;}
+.lable__white__color{
+    color: #fff;
+}
+
+/*margin*/
+.m_b_10{
+    margin-bottom: 10px;
+}
+
+/*padding*/
+.p-20{
+    padding: 20px;
+}
+.p_l_20{
+    padding-left: 20px;
+}
+
+/*display flex*/
+.flex__one__child{
+    flex: 1;
+}
+.flex__three__child{
+    flex: 3;
+}
+
+.flex__four__child{
+    flex: 4;
+}
+.display__flex{
+    display: flex;
+}
+.display__block{
+    display: block;
+}
