@@ -11,9 +11,6 @@ type fieldProps = {
     label?:string;
     id?: string;
 }
-type DraggableVanillaFormProps = {
-    onsubmit: (data: Record<string, string[]>) => void;
-};
 
 export default function DraggableVanillaForm() {
 
@@ -43,21 +40,24 @@ const addFields = () =>{
     });
 
     containers.forEach(container => {
-      container.addEventListener('dragover', e => {
+      container.addEventListener('dragover', (e) => {
         e.preventDefault();
-        const afterElement = getDragAfterElement(container, e.clientY);
+        const afterElement = getDragAfterElement(container,  (e as DragEvent).clientY);
         const dragging = document.querySelector('.dragging');
+        if (dragging && container) {
         if (afterElement == null) {
           container.appendChild(dragging);
         } else {
           container.insertBefore(dragging, afterElement);
         }
+      }
       });
     });
 }, [fieldsData]);
 
-    function getDragAfterElement(container, y) {
-      const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+    function getDragAfterElement(container:Element, y:number): Element | null {
+      //const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+      const draggableElements = Array.from(container.querySelectorAll('.draggable:not(.dragging)'));
 
       return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
@@ -67,7 +67,7 @@ const addFields = () =>{
         } else {
           return closest;
         }
-      }, { offset: Number.NEGATIVE_INFINITY }).element;
+      }, { offset: Number.NEGATIVE_INFINITY, element: null as Element | null  }).element;
     }
   
     const jsonFormDataSubmit = async(e:React.FormEvent<HTMLFormElement>) =>{
@@ -114,7 +114,7 @@ const addFields = () =>{
     <div className={styles.formContainer}>
       <div className={`${styles.section} ${styles.leftSection} container`}>
         
-        {fieldsData.map((flData, index)=> <TextInput key={flData.id} name={flData.name} label={flData.label} type={flData.type} className={`${styles.draggable} draggable`} draggable="true" /> )}
+        {fieldsData.map((flData, index)=> <TextInput key={flData.id} name={flData.name} label={flData.label} type={flData.type} className={`${styles.draggable} draggable`} draggable={true} /> )}
        {/* <div className={`${styles.draggable} draggable`} draggable="true">Field 3</div>*/}
       </div>
       <form onSubmit={jsonFormDataSubmit} className={`${dashboardStyle.dragable_container_full_with}`}>

@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 
 type textInputProps = {
     className?: string;
-    draggable?: string;
+    draggable?: boolean;
     name?:string;
     type?:string;
     label?:string;
