@@ -1,6 +1,9 @@
 import { ReactNode } from "react";
+type CallbackAnswer = (message: string, status: string) => void;
+//type CallbackAnswer = (message: string, status: 'success' | 'error') => void;
 
-export const jsonFormDataSubmit = async(e:React.FormEvent<HTMLFormElement>) =>{
+
+export const jsonFormDataSubmit = async(e:React.FormEvent<HTMLFormElement>, callBackanswer:CallbackAnswer) =>{
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const objectFormData = Object.fromEntries(formData.entries());
@@ -26,10 +29,13 @@ export const jsonFormDataSubmit = async(e:React.FormEvent<HTMLFormElement>) =>{
  
        if (response.ok) {
          console.log('Form data saved successfully');
+         callBackanswer("Form Submmited Successfully", "200");
        } else {
          console.error('Error saving form data');
+         callBackanswer("something went wrong.", "400");
        }
      } catch (error) {
+        callBackanswer('Request Not able to handel by server: 500', "500");
        console.error('Error:', error);
      }
 

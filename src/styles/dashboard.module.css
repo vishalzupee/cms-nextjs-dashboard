@@ -7,6 +7,23 @@
 
 .add__wrapper__button__section{
 }
+/*error*/
+
+.hard_error{
+    color: red;
+    font-size: 16px;
+    font-weight: 500;
+}
+.soft_error{
+    color: rgb(211, 62, 62);
+    font-size: 16px;
+    font-weight: 500;
+}
+.green_success{
+     color: green;
+    font-size: 16px;
+    font-weight: 500;
+}
 
 /*dragable section*/
 .dragable_container_full_with{

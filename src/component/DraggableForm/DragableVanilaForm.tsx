@@ -1,25 +1,30 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './DraggableForm.module.css';
 import TextInput from './LeftComponents/TextInput';
 import dashboardStyle from '@/styles/dashboard.module.css'
-import { jsonFormDataSubmit, getDragAfterElement, draggablesContainerHtmlElement } from '@/utils/dashboardDragableFromFunctions';
+import { jsonFormDataSubmit, draggablesContainerHtmlElement } from '@/utils/dashboardDragableFromFunctions';
 
 type fieldProps = {
     name?:string;
     type?:string;
     label?:string;
     id?: string;
+    value?: string;
 }
 
 export default function DraggableVanillaForm() {
 
 const [fieldsData, setFieldsData] = useState<fieldProps[]>([]);
 const [fieldCount, setFieldCount] = useState(1);
+const [message, setMessage] = useState('');
+const [messageStatus, setMessageStatus] = useState('');
+const inputRef = useRef<(HTMLInputElement | null)[]>([]);
+
 
 const addFields = () =>{
-    const keyData = {name:'input_type_field_key_'+fieldCount, type: 'text', label: 'Field Key '+fieldCount,id:'key_'+fieldCount};
-    const valueData = {name:'input_type_field_value_'+fieldCount, type: 'text', label: 'Field Value '+fieldCount,id:'value_'+fieldCount};
+    const keyData = {name:'input_type_field_key_'+fieldCount, type: 'text', label: 'Field Key '+fieldCount,id:'key_'+fieldCount, value:''};
+    const valueData = {name:'input_type_field_value_'+fieldCount, type: 'text', label: 'Field Value '+fieldCount,id:'value_'+fieldCount, value:''};
     setFieldsData(prev => [...prev, keyData, valueData]);
     setFieldCount(fieldCount+1);
 }
@@ -32,6 +37,26 @@ const addFields = () =>{
 
 }, [fieldsData]);
 
+const jsonFormDataSubmitWithCallBack = async(e:React.FormEvent<HTMLFormElement>)=>{
+  e.preventDefault();
+  await jsonFormDataSubmit(e, (message, status)=>{
+      setMessage(message);
+      setMessageStatus(status);
+      setFieldsData(prev=> prev.map(field => ({
+        ...field,
+        value: ''
+        }))
+  );
+    //console.log(message+ " update message of submission" + status)
+  });
+
+}
+
+const handleInputChange = (index: number, value: string) => {
+  const updatedFields = [...fieldsData];
+  updatedFields[index].value = value;
+  setFieldsData(updatedFields);
+};
 
   return (
     <div className='dragable__layout__wrapper__main'>
@@ -40,10 +65,11 @@ const addFields = () =>{
     <div className={styles.formContainer}>
       <div className={`${styles.section} ${styles.leftSection} container`}>
         
-        {fieldsData.map((flData, index)=> <TextInput key={flData.id} name={flData.name} label={flData.label} type={flData.type} className={`${styles.draggable} draggable`} draggable={true} /> )}
+        {fieldsData.map((flData, index)=> <TextInput key={flData.id} name={flData.name} label={flData.label} type={flData.type} className={`${styles.draggable} draggable`} draggable={true} value={flData.value} onChange={(e) => handleInputChange(index, e.target.value)} /> )}
        {/* <div className={`${styles.draggable} draggable`} draggable="true">Field 3</div>*/}
       </div>
-      <form onSubmit={jsonFormDataSubmit} className={`${dashboardStyle.dragable_container_full_with}`}>
+      <form onSubmit={jsonFormDataSubmitWithCallBack} className={`${dashboardStyle.dragable_container_full_with}`}>
+        {message && <p className={`submitmessage ${ messageStatus === '500'? dashboardStyle.hard_error : messageStatus === '400' ? dashboardStyle.soft_error : dashboardStyle.green_success }`}>{message}</p>}
       <TextInput key="1002345" name="pagename" label="Page Name" type='text' className={`${styles.draggable} draggable-none`} draggable={false} />
       <div className={`${styles.section} ${styles.rightSection} container ${dashboardStyle.width100}`}>
        {/* <div className={`${styles.draggable} draggable`} draggable="true">Field 4</div>*/}

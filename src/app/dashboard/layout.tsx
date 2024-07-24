@@ -23,9 +23,9 @@ export default function RootLayout({
         <div className={`${dashboardStyle.boday__area__wrapper}`}>
         <div className={`${dashboardStyle.flex__one__child} ${dashboardStyle['max-vh-100']} ${dashboardStyle.nav__bar__bg__color} ${dashboardStyle['p-20']}`} ><Sidebar /></div>
         <div className={`main__area_wrapper ${dashboardStyle.flex__four__child}`} >
-            <Header />
+            {/*<Header />*/}
             {children}
-            <Footer/>
+            {/*<Footer/>*/}
         </div>
         </div>
         </body>
