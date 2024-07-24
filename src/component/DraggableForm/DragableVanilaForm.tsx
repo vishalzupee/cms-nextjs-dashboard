@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './DraggableForm.module.css';
 import TextInput from './LeftComponents/TextInput';
 import dashboardStyle from '@/styles/dashboard.module.css'
-import { Form } from 'formik';
+import { jsonFormDataSubmit, getDragAfterElement, draggablesContainerHtmlElement } from '@/utils/dashboardDragableFromFunctions';
 
 type fieldProps = {
     name?:string;
@@ -28,84 +28,10 @@ const addFields = () =>{
   useEffect(() => {
     const draggables = document.querySelectorAll('.draggable');
     const containers = document.querySelectorAll('.container');
+    draggablesContainerHtmlElement(draggables, containers);
 
-    draggables.forEach(draggable => {
-      draggable.addEventListener('dragstart', () => {
-        draggable.classList.add('dragging');
-      });
-
-      draggable.addEventListener('dragend', () => {
-        draggable.classList.remove('dragging');
-      });
-    });
-
-    containers.forEach(container => {
-      container.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        const afterElement = getDragAfterElement(container,  (e as DragEvent).clientY);
-        const dragging = document.querySelector('.dragging');
-        if (dragging && container) {
-        if (afterElement == null) {
-          container.appendChild(dragging);
-        } else {
-          container.insertBefore(dragging, afterElement);
-        }
-      }
-      });
-    });
 }, [fieldsData]);
 
-    function getDragAfterElement(container:Element, y:number): Element | null {
-      //const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
-      const draggableElements = Array.from(container.querySelectorAll('.draggable:not(.dragging)'));
-
-      return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        if (offset < 0 && offset > closest.offset) {
-          return { offset: offset, element: child };
-        } else {
-          return closest;
-        }
-      }, { offset: Number.NEGATIVE_INFINITY, element: null as Element | null  }).element;
-    }
-  
-    const jsonFormDataSubmit = async(e:React.FormEvent<HTMLFormElement>) =>{
-     e.preventDefault();
-     const formData = new FormData(e.currentTarget);
-     const objectFormData = Object.fromEntries(formData.entries());
-
-     const groupedFormData: Record<string, string[]> = {};
-
-    formData.forEach((value, key) => {
-      if (!groupedFormData[key]) {
-        groupedFormData[key] = [];
-      }
-      groupedFormData[key].push(value as string);
-    });
-
-
-    try {
-        const response = await fetch('/api/jsonSaveData', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(groupedFormData),
-        });
-  
-        if (response.ok) {
-          console.log('Form data saved successfully');
-        } else {
-          console.error('Error saving form data');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-
-
-     console.log(groupedFormData);
-    }
 
   return (
     <div className='dragable__layout__wrapper__main'>
@@ -118,10 +44,9 @@ const addFields = () =>{
        {/* <div className={`${styles.draggable} draggable`} draggable="true">Field 3</div>*/}
       </div>
       <form onSubmit={jsonFormDataSubmit} className={`${dashboardStyle.dragable_container_full_with}`}>
+      <TextInput key="1002345" name="pagename" label="Page Name" type='text' className={`${styles.draggable} draggable-none`} draggable={false} />
       <div className={`${styles.section} ${styles.rightSection} container ${dashboardStyle.width100}`}>
-       {/* <div className={`${styles.draggable} draggable`} draggable="true">Field 4</div>
-        <div className={`${styles.draggable} draggable`} draggable="true">Field 5</div>
-        <div className={`${styles.draggable} draggable`} draggable="true">Field 6</div>*/}
+       {/* <div className={`${styles.draggable} draggable`} draggable="true">Field 4</div>*/}
       </div>
       <input type='submit' name='jsonsubmit' value="Submit" className={`${dashboardStyle.btn__primary}`} />
       </form>
