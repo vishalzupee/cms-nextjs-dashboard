@@ -7,6 +7,12 @@
 
 .add__wrapper__button__section{
 }
+.layout__com__wrapper{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: column;
+}
 /*error*/
 
 .hard_error{
@@ -75,6 +81,12 @@
 .font__size__18{
  font-size: 18px;
 }
+.font__size__20{
+ font-size: 20px;
+}
+.font__size__24{
+ font-size: 24px;
+}
 
 /*height*/
 .max-vh-100{
@@ -119,4 +131,10 @@
 }
 .display__block{
     display: block;
+}
+.display__justifycontent__between{
+    justify-content: space-between;
+}
+.display__flex__direction__column{
+    flex-direction: column;
 }
