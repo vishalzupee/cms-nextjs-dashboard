@@ -13,6 +13,7 @@ type textInputProps = {
     value?: string | number | undefined;
     ref?: React.ReactNode
     infoText?: string;
+    disabled?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void
 }
 
@@ -34,7 +35,7 @@ const checkFieldAreaName =({type, name, value}: fieldNameProps)=>{
 
 }
 
-const TextInput= ({ id, name, type, label, className = '', draggable, value, infoText, onChange }: textInputProps) =>{
+const TextInput= ({ id, name, type, label, className = '', draggable, value, infoText, disabled, onChange }: textInputProps) =>{
     const joinedClass = ['input__field__wrapper', className].join(' ');
 
     return (
@@ -61,7 +62,8 @@ const TextInput= ({ id, name, type, label, className = '', draggable, value, inf
                         className='input_type_field'
                         value={value}
                         name={name}
-                        onChange={onChange}
+                        onChange={onChange} 
+                        disabled={disabled}
                     />
                 )}
                 </div>

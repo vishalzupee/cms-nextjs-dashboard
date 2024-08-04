@@ -1,20 +1,26 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import DraggableVanillaForm from '../DraggableForm/DragableVanilaForm';
 import { useSearchParams } from 'next/navigation';
 
 type detailsProps = {
-    slug: string
+    slug?: string;
 }
 
 export default function ListPageDetails({slug}:detailsProps) {
    // console.log(slug);
    const serchParam = useSearchParams();
-   const editMode = serchParam.get('edit');
+   const editModeParam = serchParam.get('edit');
+   const [editMode, setEditMode] = useState(false);
+   const [editPageData, setEditPageData] = useState<any[]>([]);
 
     useEffect(()=>{
      getDetailsofCurrentJsonData();
-    },[]);
+    },[slug]);
+
+    useEffect(() => {
+      setEditMode(editModeParam === 'true' ? true : false);
+    }, [editModeParam]);
 
     const getDetailsofCurrentJsonData = async() =>{
        const resp = await fetch('/api/jsonPagelistdata',{
@@ -24,13 +30,13 @@ export default function ListPageDetails({slug}:detailsProps) {
         }, 
         body: JSON.stringify({slug})});
        const data = await resp.json();
-       console.log(data);
+      setEditPageData(data.content);
     }
 
 
   return (
     <>
-     <DraggableVanillaForm edit={editMode} />
+     <DraggableVanillaForm editMode={editMode} editPageData={editPageData} />
     </>
   )
 }
