@@ -1,5 +1,7 @@
 'use client';
+import InfoIcon from '@/component/Icons/InfoIcon';
 import React, {useState} from 'react'
+import dashboardStyle from '@/styles/dashboard.module.css';
 
 type textInputProps = {
     className?: string;
@@ -10,7 +12,8 @@ type textInputProps = {
     id?: number;
     value?: string | number | undefined;
     ref?: React.ReactNode
-    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>void
+    infoText?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void
 }
 
 type fieldNameProps = {
@@ -31,14 +34,14 @@ const checkFieldAreaName =({type, name, value}: fieldNameProps)=>{
 
 }
 
-const TextInput= ({ id, name, type, label, className = '', draggable, value, onChange }: textInputProps) =>{
+const TextInput= ({ id, name, type, label, className = '', draggable, value, infoText, onChange }: textInputProps) =>{
     const joinedClass = ['input__field__wrapper', className].join(' ');
 
     return (
         <>
             <div key={id} className={joinedClass} draggable={draggable}>
                 <div className='label__field__label'>{label}</div>
-                <div className='input__field_area'>
+                <div className={`${dashboardStyle.input__field_area}`}>
                 {type === 'textarea' ? (
                     <textarea
                         name={name}
@@ -46,6 +49,12 @@ const TextInput= ({ id, name, type, label, className = '', draggable, value, onC
                         value={value}
                         onChange={onChange}
                     />
+                ) : type=== 'select' ? (
+                <select className='input_type_field' name={name} onChange={onChange}>
+                    <option value=''>----</option>
+                    <option value='text'>Text</option>
+                    <option value='textarea'>TextArea</option>
+                </select>
                 ) : (
                     <input
                         type={type}
@@ -56,6 +65,7 @@ const TextInput= ({ id, name, type, label, className = '', draggable, value, onC
                     />
                 )}
                 </div>
+               <InfoIcon content={infoText} />
             </div>
         </>
     )

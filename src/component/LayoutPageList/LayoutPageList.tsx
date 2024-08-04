@@ -57,7 +57,7 @@ export default function LayoutPageList() {
            <div className={`list__wrapper__content__box ${dashboardStyle.display__flex} ${dashboardStyle.display__flex__direction__column} ${dashboardStyle.display__justifycontent__between} ${dashboardStyle['p-20']}`}>
           { listPageJson.map((listPage,index: number) =>{
               const slug = listPage.fileName?.split('.');
-             return <div key={index} className={`list__page__wrp ${dashboardStyle.display__flex} ${dashboardStyle.display__justifycontent__between} ${dashboardStyle['p-20']}`}><div className='page__name__number list__tab__one'>{index + 1}</div><div className='filename page__name__heading list__tab__two'> <Link href={slug ? pathname+'/'+slug[0].toString() : ''}>{listPage?.content?.pagename}</Link> </div> <div className='page__name__edit list__tab__three'>
+             return <div key={index} className={`list__page__wrp ${dashboardStyle.display__flex} ${dashboardStyle.display__justifycontent__between} ${dashboardStyle['p-20']}`}><div className='page__name__number list__tab__one'>{index + 1}</div><div className='filename page__name__heading list__tab__two'> <Link href={slug ? pathname+'/'+slug[0].toString()+'?edit=1' : ''}>{listPage?.content?.pagename}</Link> </div> <div className='page__name__edit list__tab__three'>
              Edit/Delete
           </div></div>
             })

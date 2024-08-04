@@ -13,6 +13,9 @@
     width: 100%;
     flex-direction: column;
 }
+.input__field_area{
+    display: inline-block;
+}
 /*error*/
 
 .hard_error{
@@ -134,6 +137,9 @@
 }
 .display__justifycontent__between{
     justify-content: space-between;
+}
+.display__justifycontent__flexend{
+    justify-content: flex-end;
 }
 .display__flex__direction__column{
     flex-direction: column;

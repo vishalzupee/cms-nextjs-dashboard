@@ -1,5 +1,7 @@
 'use client'
 import React, { useEffect } from 'react'
+import DraggableVanillaForm from '../DraggableForm/DragableVanilaForm';
+import { useSearchParams } from 'next/navigation';
 
 type detailsProps = {
     slug: string
@@ -7,6 +9,8 @@ type detailsProps = {
 
 export default function ListPageDetails({slug}:detailsProps) {
    // console.log(slug);
+   const serchParam = useSearchParams();
+   const editMode = serchParam.get('edit');
 
     useEffect(()=>{
      getDetailsofCurrentJsonData();
@@ -25,6 +29,8 @@ export default function ListPageDetails({slug}:detailsProps) {
 
 
   return (
-    <div>ListPageDetails</div>
+    <>
+     <DraggableVanillaForm edit={editMode} />
+    </>
   )
 }
