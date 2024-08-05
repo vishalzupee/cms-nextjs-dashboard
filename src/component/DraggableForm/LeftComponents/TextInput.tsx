@@ -52,9 +52,9 @@ const TextInput= ({ id, name, type, label, className = '', draggable, value, inf
                     />
                 ) : type=== 'select' ? (
                 <select className='input_type_field' name={name} onChange={onChange}>
-                    <option value=''>----</option>
-                    <option value='text'>Text</option>
-                    <option value='textarea'>TextArea</option>
+                    <option value='' selected={!!value}>----</option>
+                    <option value='text' selected={value == 'text'}>Text</option>
+                    <option value='textarea' selected={value == 'textarea'}>TextArea</option>
                 </select>
                 ) : (
                     <input

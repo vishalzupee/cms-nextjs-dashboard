@@ -25,6 +25,7 @@ type fieldEditProps = {
   [key: string]: string[];
 }
 
+
 export default function DraggableVanillaForm({editMode, editPageData}:EditProps) {
 
 const [fieldsData, setFieldsData] = useState<fieldProps[]>([]);
@@ -41,44 +42,47 @@ const addFields = () =>{
     setFieldCount(fieldCount+1);
 }
 
-const updateFieldsEdit = (editPageData: fieldEditProps) => {
-  for (const [key, value] of Object.entries(editPageData)) {
-    if (key === 'pagename') {
-      setEditPageName(value[0]); // Assuming `value` is an array with one string
-      continue;
-    }
 
-    const countValue = key.split('input_type_field_key_');
-    if (countValue.length > 1) {
-      const countStr = countValue[1];
-      const count = Number(countStr);
-      setFieldCount(count);
-      
-      console.log("key: " + key);
-      console.log("value: " + value);
-
-      const keyData = { name: key, type: 'text', label: 'Field Key ' + count, id: 'key_' + count, value: '', infoText: "key name for page layout" };
-     // setFieldsData(prev => [...prev, keyData]);
-
-      const correspondingValueKey = 'input_type_field_value_' + count;
-      const correspondingValue = editPageData[correspondingValueKey];
-      
-      if (correspondingValue) {
-        const fieldType = correspondingValue[0]; // Assuming `correspondingValue` is an array with one string
-        const valueData = { name: correspondingValueKey, type: 'select', label: 'Field Value ' + count, id: 'value_' + count, value: fieldType, infoText: "field type select for content side layout" };
-        setFieldsData(prev => [...prev, keyData, valueData]);
-      }
-    }
+useEffect(() => {
+  if (editMode && editPageData) {
+    updateFieldsEdit(editPageData);
   }
+}, [editPageData, editMode]);
+
+
+const updateFieldsEdit = (editPageData: any) => {
+  const newFieldsData: fieldProps[] = [];
+  const regexKey = /^input_type_field_key_\d+$/;
+  const regexField = /^input_type_field_value_\d+$/;
+  const countEdit: number[] =[];
+
+  Object.entries(editPageData).forEach(([key, value]) => {
+    if (regexKey.test(key)) {
+      const keySplit = key.split('input_type_field_key_');
+      countEdit.push(Number(keySplit[1]));
+      newFieldsData.push({
+        name: key,
+        type: 'text',
+        label: `Field Key ${keySplit[1]}`,
+        id: `key_${keySplit[1]}`,
+        value: value as string,
+        infoText: 'key name for page layout',
+      });
+    } else if (regexField.test(key)) {
+      const keySplit = key.split('input_type_field_value_');
+      newFieldsData.push({
+        name: key,
+        type: 'select',
+        label: `Field Value ${keySplit[1]}`,
+        id: `value_${keySplit[1]}`,
+        value: value as string,
+        infoText: 'field type select for content side layout',
+      });
+    }
+  });
+  setFieldCount(Math.max(...countEdit) + 1);
+  setFieldsData(newFieldsData);
 };
-
-useEffect(()=>{
-  editMode ? updateFieldsEdit(editPageData) : '';
-},[editPageData]);
-
-useEffect(()=>{
-  console.log(fieldsData);
-},[]);
 
   useEffect(() => {
     const draggables = document.querySelectorAll('.draggable');
@@ -120,9 +124,10 @@ const handleInputChange = (index: number, value: string) => {
       </div>
       <form onSubmit={jsonFormDataSubmitWithCallBack} className={`${dashboardStyle.dragable_container_full_with}`}>
         {message && <p className={`submitmessage ${ messageStatus === '500'? dashboardStyle.hard_error : messageStatus === '400' ? dashboardStyle.soft_error : dashboardStyle.green_success }`}>{message}</p>}
-      <TextInput infoText={pageVariable.create_page_development_info_icon_page_name} key="1002345" name="pagename" label="Page Name" type='text' className={`${styles.draggable} draggable-none`} value={editPageName} draggable={false} disabled={editMode === true ? editMode : false} />
+      <TextInput infoText={pageVariable.create_page_development_info_icon_page_name} key="1002345" name="pagename" label="Page Name" type='text' className={`${styles.draggable} draggable-none`} value={editPageData?.pagename} draggable={false} disabled={editMode === true ? editMode : false} />
       <div className={`${styles.section} ${styles.rightSection} container ${dashboardStyle.width100} ${dashboardStyle['p-20']} ${dashboardStyle.m_b_10}`}>
        {/* <div className={`${styles.draggable} draggable`} draggable="true">Field 4</div>*/}
+       
       </div>
       <input type='submit' name='jsonsubmit' value={editMode === true ? 'Update' : 'Submit'} className={`${dashboardStyle.btn__primary}`} />
       </form>

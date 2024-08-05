@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import DraggableVanillaForm from '../DraggableForm/DragableVanilaForm';
 import { useSearchParams } from 'next/navigation';
 
@@ -22,7 +22,7 @@ export default function ListPageDetails({slug}:detailsProps) {
       setEditMode(editModeParam === 'true' ? true : false);
     }, [editModeParam]);
 
-    const getDetailsofCurrentJsonData = async() =>{
+    const getDetailsofCurrentJsonData = useCallback(async() =>{
        const resp = await fetch('/api/jsonPagelistdata',{
         method: 'POST',
         headers: {
@@ -31,7 +31,7 @@ export default function ListPageDetails({slug}:detailsProps) {
         body: JSON.stringify({slug})});
        const data = await resp.json();
       setEditPageData(data.content);
-    }
+    },[])
 
 
   return (
