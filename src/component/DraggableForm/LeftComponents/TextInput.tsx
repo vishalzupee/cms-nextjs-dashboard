@@ -14,6 +14,7 @@ type textInputProps = {
     ref?: React.ReactNode
     infoText?: string;
     disabled?: boolean;
+    pointerevents?: string | null;
     onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>void
 }
 
@@ -35,7 +36,7 @@ const checkFieldAreaName =({type, name, value}: fieldNameProps)=>{
 
 }
 
-const TextInput= ({ id, name, type, label, className = '', draggable, value, infoText, disabled, onChange }: textInputProps) =>{
+const TextInput= ({ id, name, type, label, className = '', draggable, value, infoText, pointerevents, disabled, onChange }: textInputProps) =>{
     const joinedClass = ['input__field__wrapper', className].join(' ');
 
     return (
@@ -59,10 +60,10 @@ const TextInput= ({ id, name, type, label, className = '', draggable, value, inf
                 ) : (
                     <input
                         type={type}
-                        className='input_type_field'
+                        className={`input_type_field ${pointerevents === 'none'? dashboardStyle.pointerevents:''}`}
                         value={value}
                         name={name}
-                        onChange={onChange} 
+                        onChange={onChange}
                         disabled={disabled}
                     />
                 )}

@@ -7,6 +7,9 @@
 
 .add__wrapper__button__section{
 }
+.pointerevents{
+    pointer-events: none;
+}
 .layout__com__wrapper{
     display: flex;
     justify-content: space-between;

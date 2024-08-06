@@ -3,11 +3,11 @@ type CallbackAnswer = (message: string, status: string) => void;
 //type CallbackAnswer = (message: string, status: 'success' | 'error') => void;
 
 
-export const jsonFormDataSubmit = async(e:React.FormEvent<HTMLFormElement>, callBackanswer:CallbackAnswer) =>{
+export const jsonFormDataSubmit = async(e:React.FormEvent<HTMLFormElement>, method:string, callBackanswer:CallbackAnswer) =>{
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const objectFormData = Object.fromEntries(formData.entries());
-
+    //const objectFormData = Object.fromEntries(formData.entries());
+ 
     const groupedFormData: Record<string, string[]> = {};
 
    formData.forEach((value, key) => {
@@ -20,17 +20,20 @@ export const jsonFormDataSubmit = async(e:React.FormEvent<HTMLFormElement>, call
 
    try {
        const response = await fetch('/api/jsonSaveData', {
-         method: 'POST',
+         method: method,
          headers: {
            'Content-Type': 'application/json',
          },
          body: JSON.stringify(groupedFormData),
        });
- 
-       if (response.ok) {
+
+       if (response.ok && response.status === 200) {
          console.log('Form data saved successfully');
          callBackanswer("Form Submmited Successfully", "200");
-       } else {
+       }else if (response.ok && response.status === 250) {
+        console.log('Form data updated successfully');
+        callBackanswer("Form data updated successfully", "250");
+      } else {
          console.error('Error saving form data');
          callBackanswer("something went wrong.", "400");
        }

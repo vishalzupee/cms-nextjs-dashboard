@@ -34,6 +34,7 @@ const [message, setMessage] = useState('');
 const [messageStatus, setMessageStatus] = useState('');
 const inputRef = useRef<(HTMLInputElement | null)[]>([]);
 const [editPageName, setEditPageName] = useState<string>('');
+const formMethod = editMode === true ? 'PUT' :'POST';
 
 const addFields = () =>{
     const keyData = {name:'input_type_field_key_'+fieldCount, type: 'text', label: 'Field Key '+fieldCount,id:'key_'+fieldCount, value:'', infoText:"key name for page layout"};
@@ -91,9 +92,9 @@ const updateFieldsEdit = (editPageData: any) => {
 
 }, [fieldsData]);
 
-const jsonFormDataSubmitWithCallBack = async(e:React.FormEvent<HTMLFormElement>)=>{
+const jsonFormDataSubmitWithCallBack = async(e:React.FormEvent<HTMLFormElement>, method: string)=>{
   e.preventDefault();
-  await jsonFormDataSubmit(e, (message, status)=>{
+  await jsonFormDataSubmit(e, method , (message, status)=>{
       setMessage(message);
       setMessageStatus(status);
       setFieldsData(prev=> prev.map(field => ({
@@ -122,9 +123,9 @@ const handleInputChange = (index: number, value: string) => {
         {fieldsData.map((flData, index)=> <TextInput infoText={flData.infoText}  key={flData.id} name={flData.name} label={flData.label} type={flData.type} className={`${styles.draggable} draggable`} draggable={true} value={flData.value} onChange={(e) => handleInputChange(index, e.target.value)} /> )}
        {/* <div className={`${styles.draggable} draggable`} draggable="true">Field 3</div>*/}
       </div>
-      <form onSubmit={jsonFormDataSubmitWithCallBack} className={`${dashboardStyle.dragable_container_full_with}`}>
+      <form onSubmit={(e)=>jsonFormDataSubmitWithCallBack(e, formMethod)} className={`${dashboardStyle.dragable_container_full_with}`}>
         {message && <p className={`submitmessage ${ messageStatus === '500'? dashboardStyle.hard_error : messageStatus === '400' ? dashboardStyle.soft_error : dashboardStyle.green_success }`}>{message}</p>}
-      <TextInput infoText={pageVariable.create_page_development_info_icon_page_name} key="1002345" name="pagename" label="Page Name" type='text' className={`${styles.draggable} draggable-none`} value={editPageData?.pagename} draggable={false} disabled={editMode === true ? editMode : false} />
+      <TextInput infoText={pageVariable.create_page_development_info_icon_page_name} key="1002345" name="pagename" label="Page Name" type='text' className={`${styles.draggable} draggable-none`} value={editPageData?.pagename} draggable={false} pointerevents={editMode === true ? 'none' : ''} disabled={editMode === true ? false : false} />
       <div className={`${styles.section} ${styles.rightSection} container ${dashboardStyle.width100} ${dashboardStyle['p-20']} ${dashboardStyle.m_b_10}`}>
        {/* <div className={`${styles.draggable} draggable`} draggable="true">Field 4</div>*/}
        
